@@ -2,18 +2,19 @@
  \file squarematrix.cpp
  \brief code for Squarematrix class
  */
-#include "squarematrix.hpp"
+#include "concretematrix.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 
-SquareMatrix::SquareMatrix() {
+ConcreteSquareMatrix::ConcreteSquareMatrix() :
+		elements { } {
 
 	this->n = 0;
 }
 
-SquareMatrix::SquareMatrix(const std::string &str) {
+ConcreteSquareMatrix::ConcreteSquareMatrix(const std::string &str) {
 
 	if (isSquareMatrix(str) == false) {
 		throw std::invalid_argument("Invalid matrix");
@@ -21,33 +22,24 @@ SquareMatrix::SquareMatrix(const std::string &str) {
 
 }
 
-SquareMatrix::SquareMatrix(const SquareMatrix& m) {
+ConcreteSquareMatrix::ConcreteSquareMatrix(const ConcreteSquareMatrix& m) {
 
-	if (isSquareMatrix(m.toString()) == false) {
-		throw std::invalid_argument("Invalid matrix");
-	} else {
-
-		this->n = m.n;
-		for (unsigned int i = 0; i < m.elements.size(); i++) {
-			for (unsigned int j = 0; j < m.elements[i].size(); j++) {
-				*elements[i][j] = *m.elements[i][j].get()->clone();
-			}
-		}
-	}
+	this->n = m.n;
+	isSquareMatrix(m.toString());
 }
 
-SquareMatrix::SquareMatrix(SquareMatrix&& m) {
+ConcreteSquareMatrix::ConcreteSquareMatrix(ConcreteSquareMatrix&& m) {
 
 	n = std::move(m.n);
 	elements = std::move(m.elements);
 
 }
 
-int SquareMatrix::getN() const {
+int ConcreteSquareMatrix::getN() const {
 	return this->n;
 }
 
-bool SquareMatrix::isSquareMatrix(const std::string &str) {
+bool ConcreteSquareMatrix::isSquareMatrix(const std::string &str) {
 
 	std::stringstream input(str);
 	char c;
@@ -116,7 +108,8 @@ bool SquareMatrix::isSquareMatrix(const std::string &str) {
 	}
 }
 
-SquareMatrix& SquareMatrix::operator+=(const SquareMatrix& m) {
+ConcreteSquareMatrix& ConcreteSquareMatrix::operator+=(
+		const ConcreteSquareMatrix& m) {
 
 	if (n != m.n) {
 		throw std::invalid_argument("Error: different size matrices");
@@ -131,7 +124,8 @@ SquareMatrix& SquareMatrix::operator+=(const SquareMatrix& m) {
 	return *this;
 }
 
-SquareMatrix& SquareMatrix::operator-=(const SquareMatrix& m) {
+ConcreteSquareMatrix& ConcreteSquareMatrix::operator-=(
+		const ConcreteSquareMatrix& m) {
 
 	if (n != m.n) {
 		throw std::invalid_argument("Error: different size matrices");
@@ -145,13 +139,14 @@ SquareMatrix& SquareMatrix::operator-=(const SquareMatrix& m) {
 	return *this;
 }
 
-SquareMatrix& SquareMatrix::operator*=(const SquareMatrix& m) {
+ConcreteSquareMatrix& ConcreteSquareMatrix::operator*=(
+		const ConcreteSquareMatrix& m) {
 
 	if (n != m.n) {
 		throw std::invalid_argument("Error: different size matrices");
 	}
 
-	SquareMatrix empty_temp(m);
+	ConcreteSquareMatrix empty_temp(m);
 	empty_temp -= m;
 	for (unsigned int i = 0; i < elements.size(); i++) {
 		for (unsigned int j = 0; j < elements[i].size(); j++) {
@@ -167,9 +162,9 @@ SquareMatrix& SquareMatrix::operator*=(const SquareMatrix& m) {
 	return *this;
 }
 
-SquareMatrix SquareMatrix::transpose() {
+ConcreteSquareMatrix ConcreteSquareMatrix::transpose() {
 
-	SquareMatrix temp_matrix(*this);
+	ConcreteSquareMatrix temp_matrix(*this);
 
 	for (unsigned int i = 0; i < elements.size(); i++) {
 		for (unsigned int j = 0; j < elements[i].size(); j++) {
@@ -180,27 +175,27 @@ SquareMatrix SquareMatrix::transpose() {
 	return *this;
 }
 
-bool SquareMatrix::operator==(const SquareMatrix& m) const {
+bool ConcreteSquareMatrix::operator==(const ConcreteSquareMatrix& m) const {
 	return toString() == m.toString();
 }
 
-SquareMatrix& SquareMatrix::operator=(const SquareMatrix& m) {
+ConcreteSquareMatrix& ConcreteSquareMatrix::operator=(
+		const ConcreteSquareMatrix& m) {
 
-	if (this == &m) {
-		return *this;
-	}
+	if (this == &m) return *this;
 
-	SquareMatrix temp_copy(m);
+
+	ConcreteSquareMatrix temp_copy(m);
 	std::swap(elements, temp_copy.elements);
 	std::swap(n, temp_copy.n);
 
 	return *this;
 }
 
-SquareMatrix& SquareMatrix::operator=(SquareMatrix&& m) {
+ConcreteSquareMatrix& ConcreteSquareMatrix::operator=(
+		ConcreteSquareMatrix&& m) {
 
-	if (this == &m)
-		return *this;
+	if (this == &m) return *this;
 
 	n = std::move(m.n);
 	elements = std::move(m.elements);
@@ -208,58 +203,62 @@ SquareMatrix& SquareMatrix::operator=(SquareMatrix&& m) {
 	return *this;
 }
 
-SquareMatrix operator+(const SquareMatrix& first, const SquareMatrix& second) {
+ConcreteSquareMatrix operator+(const ConcreteSquareMatrix& first,
+		const ConcreteSquareMatrix& second) {
 
 	if (first.getN() != second.getN()) {
 		throw std::domain_error("Error: different size matrices");
 	}
 
-	SquareMatrix matrix_temp(first);
+	ConcreteSquareMatrix matrix_temp(first);
 	matrix_temp += second;
 	return matrix_temp;
 
 }
 
-SquareMatrix operator-(const SquareMatrix& first, const SquareMatrix& second) {
+ConcreteSquareMatrix operator-(const ConcreteSquareMatrix& first,
+		const ConcreteSquareMatrix& second) {
 
 	if (first.getN() != second.getN()) {
 		throw std::domain_error("Error: different size matrices");
 	}
 
-	SquareMatrix matrix_temp(first);
+	ConcreteSquareMatrix matrix_temp(first);
 	matrix_temp -= second;
 	return matrix_temp;
 
 }
 
-SquareMatrix operator*(const SquareMatrix& first, const SquareMatrix& second) {
+ConcreteSquareMatrix operator*(const ConcreteSquareMatrix& first,
+		const ConcreteSquareMatrix& second) {
 
 	if (first.getN() != second.getN()) {
 		throw std::domain_error("Error: different size matrices");
 	}
 
-	SquareMatrix matrix_temp(first);
+	ConcreteSquareMatrix matrix_temp(first);
 	matrix_temp *= second;
 	return matrix_temp;
 
 }
 
-void SquareMatrix::print(std::ostream& os) const {
+void ConcreteSquareMatrix::print(std::ostream& os) const {
 	os << toString();
 }
 
-std::string SquareMatrix::toString() const {
+std::string ConcreteSquareMatrix::toString() const {
 
 	std::stringstream strm;
 	strm << "[";
 	for (unsigned int i = 0; i < elements.size(); i++) {
 		strm << "[";
+		bool isfirst = true;
 		for (unsigned int j = 0; j < elements[i].size(); j++) {
-			if (j != unsigned(n) - 1) {
-				strm << *elements[i][j] << ",";
-			} else {
-				strm << *elements[i][j];
+			if (!isfirst) {
+				strm << ",";
 			}
+			strm << elements[i][j].get()->toString();
+			isfirst = false;
 		}
 		strm << "]";
 	}
@@ -267,7 +266,7 @@ std::string SquareMatrix::toString() const {
 	return strm.str();
 }
 
-std::ostream& operator<<(std::ostream& os, const SquareMatrix& m) {
+std::ostream& operator<<(std::ostream& os, const ConcreteSquareMatrix& m) {
 	os << m.toString();
 	return os;
 }

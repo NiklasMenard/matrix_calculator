@@ -1,12 +1,7 @@
-/**
- \file intelement_tests.cpp
- \brief tests for Intelement class
- */
-//#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
-#include "squarematrix.hpp"
+#include "valuation.hpp"
 #include "intelement.hpp"
-#include <iostream>
+#include <sstream>
 
 TEST_CASE("Intelement tests") {
 
@@ -15,9 +10,9 @@ TEST_CASE("Intelement tests") {
 	IntElement test3 { 2 };
 
 	//test clone function
-	std::unique_ptr<IntElement> testclone;
+	std::unique_ptr<Element> testclone;
 	testclone = test2.clone();
-	CHECK(*testclone == test2);
+	CHECK(testclone.get()->toString() == test2.toString());
 
 	//check testval and +, - and * operators
 	CHECK(test1.getVal() == 1);
@@ -47,7 +42,13 @@ TEST_CASE("Intelement tests") {
 	test2 = test1;
 	CHECK(test2.toString() == "10");
 
+	//test == operator
 	test1 = test2;
-	CHECK(test1==test2);
+	CHECK(test1 == test2);
+
+	Valuation ievalues;
+	ievalues.insert(std::pair<char, int>('a', 0));
+	CHECK(test1.evaluate(ievalues) == 10);
 
 }
+

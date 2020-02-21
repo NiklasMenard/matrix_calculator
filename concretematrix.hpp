@@ -2,24 +2,26 @@
  \file squarematrix.hpp
  \brief Header for SquareMatrix class
  */
-#ifndef SQUAREMATRIX_H_INCLUDED
-#define SQUAREMATRIX_H_INCLUDED
+#ifndef CONCRETESQUAREMATRIX_H_INCLUDED
+#define CONCRETESQUAREMATRIX_H_INCLUDED
 #include <ostream>
 #include <string>
 #include <sstream>
 #include <vector>
 #include <memory>
 #include "intelement.hpp"
+class SymbolicSquareMatrix;
 
 /**
  \class squarematrix
  \brief A class for square matrix
  */
-class SquareMatrix {
+class ConcreteSquareMatrix {
 
 private:
 
-	int n;
+	friend SymbolicSquareMatrix;
+	unsigned int n;
 	std::vector<std::vector<std::unique_ptr<IntElement>>> elements;
 
 public:
@@ -27,29 +29,29 @@ public:
 	/**
 	 \brief Default constructor
 	 */
-	SquareMatrix();
+	ConcreteSquareMatrix();
 
 	/**
 	 \brief Parametric constructor
 	 \string parameter
 	 */
-	SquareMatrix(const std::string&);
+	ConcreteSquareMatrix(const std::string&);
 
 	/**
 	 \brief Parametric constructor
 	 \squarematrix parameter
 	 */
-	SquareMatrix(const SquareMatrix& SquareMatrix);
+	ConcreteSquareMatrix(const ConcreteSquareMatrix& SquareMatrix);
 
 	/**
 	 \brief Move constructor
 	 */
-	SquareMatrix(SquareMatrix&&);
+	ConcreteSquareMatrix(ConcreteSquareMatrix&&);
 
 	/**
 	 \brief Destructor
 	 */
-	virtual ~SquareMatrix() = default;
+	virtual ~ConcreteSquareMatrix() = default;
 
 	/**
 	 \brief getter for N value
@@ -59,7 +61,7 @@ public:
 	/**
 	 \brief Function to transpose squarematrix
 	 */
-	SquareMatrix transpose();
+	ConcreteSquareMatrix transpose();
 
 	/**
 	 \brief Function to check if string is squarematrix
@@ -76,42 +78,42 @@ public:
 	 \return the sum of squarematrixes
 	 */
 
-	SquareMatrix& operator+=(const SquareMatrix&);
+	ConcreteSquareMatrix& operator+=(const ConcreteSquareMatrix&);
 
 	/**
 	 \brief Operator for squarematrix subtraction
 	 \param squarematrix to subtract with
 	 \return the subtraction of squarematrixes
 	 */
-	SquareMatrix& operator-=(const SquareMatrix&);
+	ConcreteSquareMatrix& operator-=(const ConcreteSquareMatrix&);
 
 	/**
 	 \brief Operator for squarematrix multiplication
 	 \param squarematrix to multiply with
 	 \return The product of squarematrixes
 	 */
-	SquareMatrix& operator*=(const SquareMatrix&);
+	ConcreteSquareMatrix& operator*=(const ConcreteSquareMatrix&);
 
 	/**
 	 \brief Operator for squarematrix equal sign
 	 \param squarematrix to equal with
 	 \return equal squarematrix
 	 */
-	SquareMatrix& operator=(const SquareMatrix&);
+	ConcreteSquareMatrix& operator=(const ConcreteSquareMatrix&);
 
 	/**
 	 \brief Move Operator for squarematrix equal sign
 	 param squarematrix to move values from
 	 return squarematrix
 	 */
-	SquareMatrix& operator=(SquareMatrix&&);
+	ConcreteSquareMatrix& operator=(ConcreteSquareMatrix&&);
 
 	/**
 	 \brief Operator compare SquareMatrix values
 	 \param SquareMatrix
 	 \return boolean
 	 */
-	bool operator==(const SquareMatrix&) const;
+	bool operator==(const ConcreteSquareMatrix&) const;
 
 	/**
 	 \brief print function
@@ -132,7 +134,7 @@ public:
  \param os stream to print in
  \param squarematrix ref to a squarematrix object
  */
-std::ostream& operator<<(std::ostream&, const SquareMatrix&);
+std::ostream& operator<<(std::ostream&, const ConcreteSquareMatrix&);
 
 /**
  \brief Operator to sum SquareMatrix values
@@ -140,7 +142,7 @@ std::ostream& operator<<(std::ostream&, const SquareMatrix&);
  \param SquareMatrix
  \return SquareMatrix Object with summed value
  */
-SquareMatrix operator+(const SquareMatrix&, const SquareMatrix&);
+ConcreteSquareMatrix operator+(const ConcreteSquareMatrix&, const ConcreteSquareMatrix&);
 
 /**
  \brief Operator to subtract SquareMatrix values
@@ -148,7 +150,7 @@ SquareMatrix operator+(const SquareMatrix&, const SquareMatrix&);
  \param SquareMatrix
  \return SquareMatrix Object with subtracted value
  */
-SquareMatrix operator-(const SquareMatrix&, const SquareMatrix&);
+ConcreteSquareMatrix operator-(const ConcreteSquareMatrix&, const ConcreteSquareMatrix&);
 
 /**
  \brief Operator to multiply SquareMatrix values
@@ -156,6 +158,6 @@ SquareMatrix operator-(const SquareMatrix&, const SquareMatrix&);
  \param SquareMatrix
  \return SquareMatrix Object with multiplied value
  */
-SquareMatrix operator*(const SquareMatrix&, const SquareMatrix&);
+ConcreteSquareMatrix operator*(const ConcreteSquareMatrix&, const ConcreteSquareMatrix&);
 
-#endif// SQUAREMATRIX_H_INCLUDED
+#endif

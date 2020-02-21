@@ -25,6 +25,11 @@ void IntElement::setVal(int val) {
 	this->value = val;
 }
 
+int IntElement::evaluate(const Valuation& valuation) const {
+
+	return value;
+}
+
 IntElement& IntElement::operator=(const IntElement& ie) {
 	this->value = ie.value;
 	return *this;
@@ -48,15 +53,12 @@ IntElement& IntElement::operator-=(const IntElement& i) {
 	return *this;
 }
 
-bool IntElement::operator==(const IntElement& i) const {
-	return toString() == i.toString();
-}
+std::unique_ptr<Element> IntElement::clone() const {
 
-std::unique_ptr<IntElement> IntElement::clone() const {
-
-	return std::unique_ptr<IntElement>(new IntElement(*this));
+	return std::unique_ptr<Element>(new IntElement(*this));
 
 }
+
 
 IntElement operator*(const IntElement&first, const IntElement&second) {
 	IntElement ie_temp(first);

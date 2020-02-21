@@ -7,11 +7,13 @@
 #include <ostream>
 #include <string>
 #include <memory>
+#include "valuation.hpp"
+#include "element.hpp"
 /**
  \class IntElement
  \brief A class for intelement
  */
-class IntElement {
+class IntElement : public Element{
 
 private:
 
@@ -78,22 +80,20 @@ public:
 	IntElement& operator*=(const IntElement&);
 
 	/**
-	 \brief Operator compare intelement values
-	 \param intelement
-	 \return boolean
-	 */
-	bool operator==(const IntElement&) const;
-
-	/**
 	 \brief Makes a string representation of Intelelement
 	 \return The string representation
 	 */
-	std::string toString() const;
+	std::string toString() const override;
 
 	/**
 	 \brief clone function
 	 */
-	std::unique_ptr<IntElement> clone() const;
+	std::unique_ptr<Element> clone() const override;
+
+	/**
+	 \brief evaluate function
+	 */
+	int evaluate(const Valuation&) const override;
 
 };
 
@@ -128,4 +128,4 @@ IntElement operator-(const IntElement&, const IntElement&);
  */
 std::ostream& operator<<(std::ostream& os, const IntElement& ie);
 
-#endif // INTELEMENT_H_INCLUDED
+#endif
