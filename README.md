@@ -2,6 +2,5 @@
 C++ matrix calculator
 
 School C++ project to implement a matrix calculator.
-Catch unit tests written.
 
-Work in progress..
+Writing catch unit tests and Doxygen documentation
